@@ -1,19 +1,13 @@
 from django.core.validators import (
     MinValueValidator,
     MaxValueValidator,
-    MaxLengthValidator,
 )
 from django.db import models
 
 
 class Movie(models.Model):
     title = models.CharField(max_length=100)
-    description = models.TextField(
-        null=True,
-        validators=[
-            MaxLengthValidator(300),
-        ],
-    )
+    description = models.CharField(null=True, max_length=255)
     duration = models.IntegerField(
         default=1,
         validators=[

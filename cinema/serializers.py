@@ -8,7 +8,7 @@ class MovieSerializer(serializers.Serializer):
     title = serializers.CharField(required=True, max_length=100)
     description = serializers.CharField(
         required=False,
-        max_length=300
+        max_length=255
     )
     duration = serializers.IntegerField(
         required=True,

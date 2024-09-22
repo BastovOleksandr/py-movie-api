@@ -1,7 +1,3 @@
-from ctypes import string_at
-
-from django.core.serializers import serialize
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
@@ -12,20 +8,19 @@ from cinema.serializers import MovieSerializer
 
 
 @api_view(["GET", "POST"])
-def movie_list(request):
+def list_or_create_movie(request):
     if request.method == "GET":
         movies = Movie.objects.all()
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    else:
-        serializer = MovieSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    serializer = MovieSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(["GET", "PUT", "DELETE"])
-def movie_detail(request, pk):
+def get_update_delete_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     if request.method == "GET":
         serializer = MovieSerializer(movie)
@@ -35,6 +30,5 @@ def movie_detail(request, pk):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-    else:
-        movie.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    movie.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
